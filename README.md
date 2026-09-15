@@ -6,7 +6,7 @@ Site statique d'une page. Ouvre simplement `index.html` dans un navigateur : auc
 - `data.js` — **toutes les données** : calendrier, classements, équipes.
 
 > ⚠️ Écris les noms d'équipes exactement de la même façon partout (accents compris).
-> Après une modification, recharge la page. Si une section est vide, il y a probablement une virgule ou un guillemet manquant dans `data.js`.
+> Après une modification, recharge la page. Une fois le site en ligne, change aussi le numéro dans `<script src="data.js?v=2">` (index.html) — `v=3`, `v=4`… — sinon les téléphones peuvent garder l'ancienne version en mémoire. Si une section est vide, il y a probablement une virgule ou un guillemet manquant dans `data.js`.
 
 ## Ajouter un match
 
