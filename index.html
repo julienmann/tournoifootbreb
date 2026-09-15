@@ -348,19 +348,20 @@
   }
   .pied .credit {
     position: absolute;
-    right: 1rem;
-    bottom: .75rem;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
     margin: 0;
     display: flex;
     align-items: center;
-    gap: .5rem;
-    font-size: .85rem;
+    gap: .75rem;
+    font-size: 1.05rem;
     color: var(--gris);
   }
   .pied .credit a { display: block; line-height: 0; border-radius: 50%; transition: transform .2s; }
   .pied .credit a:hover, .pied .credit a:focus-visible { transform: scale(1.08); }
   @media (max-width: 600px) {
-    .pied .credit { position: static; justify-content: center; margin-top: 1.25rem; }
+    .pied .credit { position: static; transform: none; justify-content: center; margin-top: 1.25rem; }
   }
   .pied h2 { font-size: 2rem; margin-bottom: .75rem; }
   .pied p { margin: .35rem 0; }
@@ -369,12 +370,17 @@
 
   /* Admin */
   .btn-admin {
-    position: absolute; left: 1rem; bottom: .75rem;
-    background: none; border: 1px solid rgba(201, 210, 245, .35); border-radius: 999px;
-    color: var(--gris); font: inherit; font-size: .75rem; padding: .15rem .6rem; cursor: pointer; opacity: .7;
+    position: absolute; top: .75rem; right: .75rem; z-index: 1;
+    display: inline-flex; align-items: center; gap: .35rem;
+    background: var(--nuit); color: var(--blanc);
+    border: 2px solid var(--or); border-radius: 999px;
+    font-family: var(--titre); font-stretch: condensed; font-weight: 700;
+    font-size: .95rem; text-transform: uppercase; letter-spacing: .05em; line-height: 1;
+    padding: .35rem .7rem .3rem; cursor: pointer;
   }
-  .btn-admin:hover, .btn-admin:focus-visible { opacity: 1; border-color: var(--or); color: var(--or); }
-  @media (max-width: 600px) { .btn-admin { position: static; margin-top: 1rem; } }
+  .btn-admin svg { width: 12px; height: 12px; flex: none; }
+  .btn-admin:hover { background: var(--or); color: var(--nuit); }
+  @media (max-width: 639px) { .entete { padding-top: 3.5rem; } }
   .admin {
     width: min(44rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem);
     background: var(--nuit); color: var(--blanc);
@@ -407,6 +413,10 @@
 <a class="lien-evitement" href="#contenu">Aller au contenu</a>
 
 <header class="entete">
+  <button type="button" class="btn-admin" id="btn-admin">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+    Admin
+  </button>
   <div class="conteneur">
     <p class="college">Collège Jean-de-Brébeuf</p>
     <h1>Tournoi 7v7 <span class="or">Brébeuf</span></h1>
@@ -529,14 +539,13 @@
   <p class="credit">
     site par
     <a href="https://manndev.com" rel="noopener" aria-label="manndev.com">
-      <svg viewBox="0 0 100 100" width="40" height="40" aria-hidden="true">
+      <svg viewBox="0 0 100 100" width="60" height="60" aria-hidden="true">
         <circle cx="50" cy="50" r="50" fill="#232a36"/>
         <circle cx="50" cy="50" r="41" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-dasharray="0.1 8.2"/>
         <text x="50" y="62" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="34" fill="#fff">m<tspan fill="#f2b632">/</tspan>d</text>
       </svg>
     </a>
   </p>
-  <button type="button" class="btn-admin" id="btn-admin">admin</button>
 </footer>
 
 <dialog class="admin" id="admin" aria-labelledby="admin-titre">
