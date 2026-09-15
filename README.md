@@ -51,13 +51,17 @@ coach: "Prénom Nom", assistant: "Prénom Nom",
 ```
 # tournoifootbreb
 
-## Portail admin (scores en direct)
+## Portail admin
 
-Le bouton **admin** en bas de page ouvre un portail protégé par un code à 6 chiffres. On peut y entrer le score de chaque match et choisir son statut : **À venir**, **Live** ou **Terminé**. Les visiteurs voient les changements en moins d'une minute (la page se met à jour toute seule toutes les 30 secondes).
+Le bouton **Admin** en haut à droite ouvre un portail protégé par un code à 6 chiffres. On peut y modifier **tout ce que contient `data.js`** :
 
-Les scores du portail sont stockés dans un Worker Cloudflare (dossier `worker/`) et **remplacent** ceux de `data.js`. Les matchs « Live » s'affichent aussi en haut du calendrier.
+- **Calendrier** — semaines, matchs (date, heure, équipes), scores et statut : **À venir**, **Live** ou **Terminé**.
+- **Équipes** — nom, groupe, coach, assistant, joueurs (C = capitaine, GK = gardien). Le groupe place l'équipe dans les classements ; renommer une équipe met aussi à jour ses matchs.
+- **Réglages** — « Effacer et revenir à data.js » efface tout ce qui a été enregistré dans le portail.
 
-> ⚠️ Un match est reconnu par sa date, son heure et ses deux équipes. Si tu modifies une de ces infos dans `data.js`, entre à nouveau son score dans le portail.
+Rien n'est publié avant de cliquer sur **Enregistrer**. Les visiteurs voient les changements en moins d'une minute (la page se met à jour toute seule toutes les 30 secondes). Si deux personnes modifient en même temps, la deuxième doit rouvrir le portail avant d'enregistrer.
+
+> ⚠️ Dès le premier enregistrement dans le portail, le site utilise les données du Worker Cloudflare (dossier `worker/`) et **ignore `data.js`**. Modifier `data.js` n'a alors plus d'effet, sauf après « Effacer et revenir à data.js ».
 
 ### Installation (une seule fois)
 

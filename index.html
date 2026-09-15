@@ -382,31 +382,60 @@
   .btn-admin:hover { background: var(--or); color: var(--nuit); }
   @media (max-width: 639px) { .entete { padding-top: 3.5rem; } }
   .admin {
-    width: min(44rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem);
+    width: min(52rem, calc(100vw - 1rem)); max-height: calc(100dvh - 1rem);
     background: var(--nuit); color: var(--blanc);
     border: 2px solid var(--or); border-radius: var(--rayon); padding: 0;
   }
+  .admin[open] { display: flex; flex-direction: column; }
   .admin [hidden] { display: none; }
   .admin::backdrop { background: rgba(10, 15, 50, .75); }
-  .admin-tete { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.25rem; border-bottom: 1px solid var(--nuit-2); position: sticky; top: 0; background: var(--nuit); z-index: 1; }
+  .admin-tete { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .9rem 1.25rem; border-bottom: 1px solid var(--nuit-2); }
   .admin-tete h2 { font-size: 1.8rem; margin: 0; }
-  .admin-corps { padding: 1rem 1.25rem 1.25rem; }
+  .admin-corps { padding: 1rem 1.25rem 1.25rem; overflow-y: auto; flex: 1 1 auto; overscroll-behavior: contain; }
+  .admin-barre { display: flex; align-items: center; justify-content: space-between; gap: .75rem 1rem; flex-wrap: wrap; padding: .75rem 1.25rem; border-top: 1px solid var(--nuit-2); background: var(--nuit); }
+  .admin-barre span { color: var(--or); font-size: .9rem; }
   .admin button.btn { background: var(--or); color: var(--nuit); border: 0; border-radius: 8px; font: inherit; font-weight: 700; padding: .5rem .9rem; cursor: pointer; }
   .admin button.btn:disabled { opacity: .5; cursor: default; }
+  .admin button.btn.danger { background: #e5243b; color: var(--blanc); }
   .admin button.lien { background: none; border: 0; color: var(--gris); font: inherit; text-decoration: underline; cursor: pointer; padding: .25rem; }
-  .admin input, .admin select { font: inherit; font-size: 1rem; background: var(--blanc); color: var(--nuit); border: 2px solid transparent; border-radius: 8px; padding: .4rem .5rem; }
+  .admin button.lien.danger { color: #ff8f9b; }
+  .admin button.btn-secondaire { justify-self: start; background: none; border: 2px dashed rgba(255,200,46,.6); color: var(--or); border-radius: 8px; font: inherit; font-weight: 700; padding: .4rem .8rem; cursor: pointer; }
+  .admin button.btn-secondaire:hover { border-style: solid; }
+  .admin input, .admin select { font: inherit; font-size: 1rem; background: var(--blanc); color: var(--nuit); border: 2px solid transparent; border-radius: 8px; padding: .4rem .5rem; min-width: 0; }
   .admin input:focus-visible, .admin select:focus-visible { outline: none; border-color: var(--or); }
+  .admin input[type="checkbox"] { width: 1.1rem; height: 1.1rem; padding: 0; margin: 0; accent-color: var(--or); }
   .code-form { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
   .code-form input { width: 9rem; letter-spacing: .3em; text-align: center; font-size: 1.3rem; }
   .admin-msg { min-height: 1.4rem; margin: .5rem 0 0; color: var(--or); font-size: .9rem; }
-  .admin-semaine { font-size: 1.3rem; color: var(--or); margin: 1rem 0 .5rem; }
-  .admin-match { background: var(--nuit-2); border-radius: 10px; padding: .75rem; display: grid; gap: .5rem; }
-  .admin-match + .admin-match { margin-top: .5rem; }
-  .admin-match .qui { font-weight: 700; }
-  .admin-match .qui small { display: block; font-weight: 400; color: var(--gris); }
-  .admin-champs { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
-  .admin-champs input { width: 3.5rem; text-align: center; }
-  .admin-champs .etat { font-size: .85rem; color: var(--gris); }
+  .admin-msg:empty { display: none; }
+  .admin-onglets { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+  .admin-onglets button {
+    background: none; color: var(--blanc); border: 2px solid var(--or); border-radius: 999px; cursor: pointer;
+    font-family: var(--titre); font-stretch: condensed; font-weight: 700; font-size: 1.05rem; text-transform: uppercase; letter-spacing: .04em;
+    padding: .35rem .85rem .3rem;
+  }
+  .admin-onglets button[aria-selected="true"] { background: var(--or); color: var(--nuit); }
+  .admin-bloc { background: var(--nuit-2); border-radius: 12px; padding: .9rem; margin-bottom: .9rem; display: grid; gap: .6rem; }
+  .admin-bloc h4 { margin: .25rem 0 0; font-family: var(--titre); font-stretch: condensed; font-size: 1.25rem; text-transform: uppercase; color: var(--or); }
+  .admin-aide { margin: 0 0 .9rem; font-size: .85rem; color: var(--gris); }
+  .admin-bloc .admin-aide { margin: 0; }
+  .admin-match { background: var(--nuit); border-left: 4px solid var(--or); border-radius: 10px; padding: .7rem; display: grid; gap: .5rem; }
+  .admin-match.est-live { border-left-color: #e5243b; }
+  .admin-grille { display: grid; gap: .5rem; grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr)); }
+  @media (max-width: 480px) { .admin-corps { padding: .75rem; } .admin-bloc { padding: .7rem; } .admin-match { padding: .6rem; } }
+  .admin-champ { display: grid; gap: .2rem; font-size: .8rem; color: var(--gris); min-width: 0; }
+  .admin-champ input:not([type="checkbox"]), .admin-champ select { width: 100%; }
+  .admin-champs { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .5rem .6rem; }
+  .admin-champs .court { width: 4rem; text-align: center; }
+  .admin-champs .tiret { padding-bottom: .55rem; }
+  .admin-champs .lien { margin-left: auto; padding-bottom: .5rem; }
+  .admin-ligne { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: .5rem; }
+  .admin-ligne .admin-champ { flex: 1 1 14rem; }
+  .admin-joueur { display: flex; align-items: center; gap: .6rem; }
+  .admin-joueur input[type="text"] { flex: 1 1 0; width: 0; }
+  .admin-bloc > *, .admin-match > * { min-width: 0; }
+  .admin-joueur .lien { font-size: 1.1rem; text-decoration: none; padding: .25rem .4rem; }
+  .admin-coche { display: inline-flex; align-items: center; gap: .3rem; font-size: .85rem; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -553,21 +582,29 @@
     <h2 id="admin-titre">Admin</h2>
     <button type="button" class="lien" id="admin-fermer">Fermer</button>
   </div>
-  <div class="admin-corps">
+  <div class="admin-corps" id="admin-corps">
     <form class="code-form" id="admin-login">
       <label for="admin-code">Code à 6 chiffres</label>
       <input id="admin-code" type="password" inputmode="numeric" autocomplete="off" pattern="\d{6}" maxlength="6" required>
       <button class="btn" type="submit">Entrer</button>
     </form>
-    <div id="admin-panneau" hidden>
-      <button type="button" class="lien" id="admin-deco">Se déconnecter</button>
-      <div id="admin-liste"></div>
-    </div>
     <p class="admin-msg" id="admin-msg" role="status"></p>
+    <div id="admin-panneau" hidden>
+      <div class="admin-onglets" role="tablist" aria-label="Sections">
+        <button type="button" role="tab" data-onglet="calendrier" aria-selected="true">Calendrier</button>
+        <button type="button" role="tab" data-onglet="equipes" aria-selected="false">Équipes</button>
+        <button type="button" role="tab" data-onglet="reglages" aria-selected="false">Réglages</button>
+      </div>
+      <div id="admin-zone" role="tabpanel"></div>
+    </div>
+  </div>
+  <div class="admin-barre" id="admin-barre" hidden>
+    <span id="admin-etat" role="status"></span>
+    <button type="button" class="btn" id="admin-enregistrer" disabled>Enregistrer</button>
   </div>
 </dialog>
 
-<script src="data.js?v=2"></script>
+<script src="data.js?v=3"></script>
 <script>
 (function () {
   "use strict";
@@ -588,6 +625,7 @@
   }
   function vide(v) { return v === null || v === undefined || v === ""; }
   function lettres(obj) { return Object.keys(obj || {}).sort(); }
+  function copie(o) { return JSON.parse(JSON.stringify(o)); }
 
   if (!T) {
     document.getElementById("zone-calendrier").appendChild(
@@ -596,47 +634,109 @@
     return;
   }
 
-  // ---------- Calendrier ----------
-  // Les scores/statuts venant du portail admin (API) remplacent ceux de data.js.
+  // ---------- Données ----------
+  // data.js sert de point de départ. Dès que le portail admin enregistre,
+  // la version stockée dans le Worker (API) la remplace.
   var API = (T.api || "").replace(/\/+$/, "");
-  var enDirect = {};
+  var STATUTS = ["a-venir", "live", "termine"];
 
   function idMatch(m) { return [m.date, m.heure, m.equipeA, m.equipeB].join("|"); }
-  function etatMatch(m) {
-    var e = enDirect[idMatch(m)] || {};
-    var a = e.statut ? e.scoreA : m.scoreA, b = e.statut ? e.scoreB : m.scoreB;
-    var joue = !vide(a) && !vide(b);
-    return { scoreA: joue ? a : null, scoreB: joue ? b : null, statut: e.statut || (joue ? "termine" : "a-venir") };
+  function normScore(v) {
+    if (vide(v)) return null;
+    var n = +v;
+    return Number.isInteger(n) && n >= 0 && n <= 99 ? n : null;
+  }
+  // « anciens » = scores enregistrés par l'ancienne version du portail (clé = idMatch).
+  function normaliser(src, anciens) {
+    src = src || {};
+    var txt = function (v) { return v == null ? "" : String(v); };
+    var classements = {};
+    Object.keys(src.classements || {}).forEach(function (g) {
+      classements[g] = (src.classements[g] || []).map(function (r) { return { equipe: txt(r.equipe) }; });
+    });
+    return {
+      maj: +src.maj || 0,
+      calendrier: (src.calendrier || []).map(function (s) {
+        return {
+          semaine: txt(s.semaine),
+          matchs: (s.matchs || []).map(function (m) {
+            var a = normScore(m.scoreA), b = normScore(m.scoreB), statut = m.statut;
+            var o = anciens && anciens[idMatch(m)];
+            if (o && o.statut) { a = normScore(o.scoreA); b = normScore(o.scoreB); statut = o.statut; }
+            if (a === null || b === null) a = b = null;
+            if (STATUTS.indexOf(statut) < 0) statut = a !== null ? "termine" : "a-venir";
+            return { date: txt(m.date), heure: txt(m.heure), equipeA: txt(m.equipeA), equipeB: txt(m.equipeB), scoreA: a, scoreB: b, statut: statut };
+          })
+        };
+      }),
+      classements: classements,
+      equipes: (src.equipes || []).map(function (e) {
+        return {
+          nom: txt(e.nom), groupe: txt(e.groupe),
+          joueurs: (e.joueurs || []).map(function (j) {
+            var o = { nom: txt(j.nom) };
+            if (j.capitaine) o.capitaine = true;
+            if (j.gardien) o.gardien = true;
+            return o;
+          }),
+          coach: txt(e.coach), assistant: txt(e.assistant)
+        };
+      })
+    };
   }
 
+  var D = normaliser(T);
+  var dernierRendu = "";
+  function rendreTout() {
+    var cle = JSON.stringify(D);
+    if (cle === dernierRendu) return;
+    dernierRendu = cle;
+    rendreCalendrier();
+    rendreClassements();
+    rendreEquipes();
+  }
+
+  function chargerDonnees() {
+    if (!API) return Promise.resolve();
+    return fetch(API + "/donnees", { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (r) {
+        if (!r) return;
+        var n = r.donnees ? normaliser(r.donnees) : normaliser(T, r.matchs);
+        if (n.maj < D.maj) return; // copie pas encore à jour : on garde la plus récente
+        D = n;
+        rendreTout();
+      })
+      .catch(function () {});
+  }
+
+  // ---------- Calendrier ----------
   var zc = document.getElementById("zone-calendrier");
   function rendreCalendrier() {
     zc.textContent = "";
     var enCours = el("ul", { classe: "matchs" });
-    (T.calendrier || []).forEach(function (sem) {
+    D.calendrier.forEach(function (sem) {
       var ul = el("ul", { classe: "matchs" });
-      (sem.matchs || []).forEach(function (m) {
+      sem.matchs.forEach(function (m) {
         ul.appendChild(carteMatch(m));
-        if (etatMatch(m).statut === "live") enCours.appendChild(carteMatch(m));
+        if (m.statut === "live") enCours.appendChild(carteMatch(m));
       });
       zc.appendChild(el("div", { classe: "semaine" }, [el("h3", { texte: sem.semaine }), ul]));
     });
     if (enCours.children.length) {
       zc.insertBefore(el("div", { classe: "semaine en-direct" }, [el("h3", { texte: "En direct" }), enCours]), zc.firstChild);
     }
-    if (!(T.calendrier || []).length) zc.appendChild(el("p", { texte: "Calendrier à venir." }));
-    rendreClassements();
+    if (!D.calendrier.length) zc.appendChild(el("p", { texte: "Calendrier à venir." }));
   }
 
   function carteMatch(m) {
-    var e = etatMatch(m);
-    var score = e.scoreA === null ? null
-      : el("span", { classe: "score", "aria-label": "Score : " + e.scoreA + " à " + e.scoreB, texte: e.scoreA + " – " + e.scoreB });
+    var score = m.scoreA === null ? null
+      : el("span", { classe: "score", "aria-label": "Score : " + m.scoreA + " à " + m.scoreB, texte: m.scoreA + " – " + m.scoreB });
     var resultat;
-    if (e.statut === "live") resultat = el("span", { classe: "resultat" }, [el("span", { classe: "live", texte: "Live" }), score]);
-    else if (e.statut === "termine" && score) resultat = score;
-    else resultat = el("span", { classe: "a-venir", texte: e.statut === "termine" ? "terminé" : "à venir" });
-    return el("li", { classe: "match" + (e.statut === "live" ? " est-live" : "") }, [
+    if (m.statut === "live") resultat = el("span", { classe: "resultat" }, [el("span", { classe: "live", texte: "Live" }), score]);
+    else if (m.statut === "termine" && score) resultat = score;
+    else resultat = el("span", { classe: "a-venir", texte: m.statut === "termine" ? "terminé" : "à venir" });
+    return el("li", { classe: "match" + (m.statut === "live" ? " est-live" : "") }, [
       el("div", { classe: "match-quand" }, [el("strong", { texte: m.date }), el("span", { texte: m.heure })]),
       el("div", { classe: "match-equipes" }, [
         el("span", { texte: m.equipeA }), el("span", { classe: "vs", texte: "vs" }), el("span", { texte: m.equipeB })
@@ -644,134 +744,6 @@
       resultat
     ]);
   }
-  rendreCalendrier();
-
-  function chargerEnDirect() {
-    if (!API) return Promise.resolve();
-    return fetch(API + "/matchs", { cache: "no-store" })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (d) { if (d) { enDirect = d; rendreCalendrier(); } })
-      .catch(function () {});
-  }
-  chargerEnDirect();
-  setInterval(function () { if (!document.hidden) chargerEnDirect(); }, 30000);
-
-  // ---------- Portail admin ----------
-  (function () {
-    var dlg = document.getElementById("admin");
-    var login = document.getElementById("admin-login");
-    var champCode = document.getElementById("admin-code");
-    var panneau = document.getElementById("admin-panneau");
-    var liste = document.getElementById("admin-liste");
-    var msg = document.getElementById("admin-msg");
-    var CLE = "tournoi-admin-code";
-
-    function lireCode() { try { return sessionStorage.getItem(CLE) || ""; } catch (e) { return ""; } }
-    function ecrireCode(c) { try { c ? sessionStorage.setItem(CLE, c) : sessionStorage.removeItem(CLE); } catch (e) {} }
-
-    function appel(methode, chemin, corps) {
-      return fetch(API + chemin, {
-        method: methode,
-        headers: { "Content-Type": "application/json", Authorization: "Bearer " + lireCode() },
-        body: corps ? JSON.stringify(corps) : undefined
-      }).then(function (r) {
-        if (r.ok) return r.status === 204 ? null : r.json();
-        return r.json().catch(function () { return {}; }).then(function (d) {
-          var err = new Error(d.erreur || "Erreur " + r.status);
-          err.statut = r.status;
-          throw err;
-        });
-      });
-    }
-
-    function afficher(connecte) {
-      login.hidden = connecte;
-      panneau.hidden = !connecte;
-      if (connecte) rendreListe(); else { champCode.value = ""; champCode.focus(); }
-    }
-
-    function deconnecter(texte) { ecrireCode(""); afficher(false); msg.textContent = texte || ""; }
-
-    function rendreListe() {
-      liste.textContent = "";
-      (T.calendrier || []).forEach(function (sem) {
-        liste.appendChild(el("h3", { classe: "admin-semaine", texte: sem.semaine }));
-        (sem.matchs || []).forEach(function (m) {
-          var e = etatMatch(m);
-          var id = idMatch(m).replace(/[^\w]+/g, "-");
-          var inA = el("input", { type: "number", min: "0", max: "99", inputmode: "numeric", id: "sa-" + id, "aria-label": "Buts " + m.equipeA });
-          var inB = el("input", { type: "number", min: "0", max: "99", inputmode: "numeric", id: "sb-" + id, "aria-label": "Buts " + m.equipeB });
-          inA.value = e.scoreA === null ? "" : e.scoreA;
-          inB.value = e.scoreB === null ? "" : e.scoreB;
-          var sel = el("select", { "aria-label": "Statut" }, [
-            el("option", { value: "a-venir", texte: "À venir" }),
-            el("option", { value: "live", texte: "Live" }),
-            el("option", { value: "termine", texte: "Terminé" })
-          ]);
-          sel.value = e.statut;
-          var btn = el("button", { classe: "btn", type: "button", texte: "Enregistrer" });
-          var etat = el("span", { classe: "etat", role: "status" });
-
-          btn.addEventListener("click", function () {
-            var a = inA.value === "" ? null : +inA.value, b = inB.value === "" ? null : +inB.value;
-            var ok = function (v) { return v === null || (Number.isInteger(v) && v >= 0 && v <= 99); };
-            if (!ok(a) || !ok(b)) { etat.textContent = "Score invalide (0 à 99)."; return; }
-            if ((a === null) !== (b === null)) { etat.textContent = "Entre les deux scores (ou aucun)."; return; }
-            btn.disabled = true;
-            etat.textContent = "Enregistrement…";
-            appel("PUT", "/matchs", { id: idMatch(m), scoreA: a, scoreB: b, statut: sel.value })
-              .then(function (r) {
-                enDirect[idMatch(m)] = r;
-                rendreCalendrier();
-                etat.textContent = "Enregistré ✓";
-              })
-              .catch(function (err) {
-                if (err.statut === 401 || err.statut === 429) deconnecter(err.message);
-                else etat.textContent = err.message || "Erreur réseau.";
-              })
-              .then(function () { btn.disabled = false; });
-          });
-
-          liste.appendChild(el("div", { classe: "admin-match" }, [
-            el("div", { classe: "qui" }, [m.equipeA + " vs " + m.equipeB, el("small", { texte: m.date + " · " + m.heure })]),
-            el("div", { classe: "admin-champs" }, [
-              el("label", { "for": "sa-" + id, classe: "etat", texte: m.equipeA }), inA,
-              el("span", { texte: "–" }),
-              inB, el("label", { "for": "sb-" + id, classe: "etat", texte: m.equipeB }),
-              sel, btn, etat
-            ])
-          ]));
-        });
-      });
-    }
-
-    document.getElementById("btn-admin").addEventListener("click", function () {
-      msg.textContent = "";
-      if (!API) {
-        login.hidden = true; panneau.hidden = true;
-        msg.textContent = "Le portail admin n'est pas configuré (voir « api » dans data.js).";
-        dlg.showModal();
-        return;
-      }
-      dlg.showModal();
-      if (lireCode()) chargerEnDirect().then(function () { afficher(true); });
-      else afficher(false);
-    });
-    document.getElementById("admin-fermer").addEventListener("click", function () { dlg.close(); });
-    document.getElementById("admin-deco").addEventListener("click", function () { deconnecter(""); });
-
-    login.addEventListener("submit", function (ev) {
-      ev.preventDefault();
-      var code = champCode.value.trim();
-      if (!/^\d{6}$/.test(code)) { msg.textContent = "Le code doit avoir 6 chiffres."; return; }
-      msg.textContent = "Vérification…";
-      ecrireCode(code);
-      appel("POST", "/login")
-        .then(function () { msg.textContent = ""; return chargerEnDirect(); })
-        .then(function () { afficher(true); })
-        .catch(function (err) { deconnecter(err.message || "Erreur réseau."); });
-    });
-  })();
 
   // ---------- Classements ----------
   // Calculés à partir des matchs « Terminé » entre deux équipes du même groupe.
@@ -779,16 +751,16 @@
   function rendreClassements() {
     var zcl = document.getElementById("zone-classements");
     zcl.textContent = "";
-    lettres(T.classements).forEach(function (g) {
+    lettres(D.classements).forEach(function (g) {
       var parEquipe = {};
-      var lignes = T.classements[g].map(function (r) {
+      var lignes = D.classements[g].map(function (r) {
         return (parEquipe[r.equipe] = { equipe: r.equipe, mj: 0, v: 0, n: 0, d: 0, bp: 0, bc: 0, db: 0, pts: 0 });
       });
-      (T.calendrier || []).forEach(function (sem) {
-        (sem.matchs || []).forEach(function (m) {
-          var e = etatMatch(m), a = parEquipe[m.equipeA], b = parEquipe[m.equipeB];
-          if (!a || !b || e.statut !== "termine" || e.scoreA === null) return;
-          var sa = +e.scoreA, sb = +e.scoreB;
+      D.calendrier.forEach(function (sem) {
+        sem.matchs.forEach(function (m) {
+          var a = parEquipe[m.equipeA], b = parEquipe[m.equipeB];
+          if (!a || !b || m.statut !== "termine" || m.scoreA === null) return;
+          var sa = m.scoreA, sb = m.scoreB;
           a.mj++; b.mj++;
           a.bp += sa; a.bc += sb; b.bp += sb; b.bc += sa;
           if (sa > sb) { a.v++; b.d++; } else if (sa < sb) { b.v++; a.d++; } else { a.n++; b.n++; }
@@ -822,57 +794,389 @@
 
   // ---------- Équipes ----------
   var ze = document.getElementById("zone-equipes");
-  (T.equipes || []).forEach(function (eq) {
-    var corps;
-    if (eq.joueurs && eq.joueurs.length) {
-      var ul = el("ul", { classe: "joueurs" });
-      eq.joueurs.forEach(function (j) {
-        var li = el("li", null, [j.nom]);
-        if (j.capitaine) li.appendChild(el("abbr", { classe: "role", title: "Capitaine", style: "text-decoration:none", texte: "(C)" }));
-        if (j.gardien) li.appendChild(el("abbr", { classe: "role", title: "Gardien de but", style: "text-decoration:none", texte: "(GK)" }));
-        ul.appendChild(li);
-      });
-      corps = el("details", { classe: "joueurs-details", open: "" }, [
-        el("summary", { texte: "Joueurs (" + eq.joueurs.length + ")" }),
-        ul
-      ]);
-    } else {
-      corps = el("p", { classe: "liste-vide", texte: "Liste à venir" });
-    }
-    var staff = null;
-    if (eq.coach || eq.assistant) {
-      staff = el("dl", { classe: "staff" });
-      if (eq.coach) { staff.appendChild(el("dt", { texte: "Coach" })); staff.appendChild(el("dd", { texte: eq.coach })); }
-      if (eq.assistant) { staff.appendChild(el("dt", { texte: "Assistant coach" })); staff.appendChild(el("dd", { texte: eq.assistant })); }
-    }
-    ze.appendChild(el("article", { classe: "carte carte-equipe" }, [
-      el("header", null, [
-        el("h3", { texte: eq.nom }),
-        el("span", { classe: "etiquette", texte: "Groupe " + eq.groupe })
-      ]),
-      corps,
-      staff
-    ]));
-  });
-
-  // Bouton « Réduire / Afficher tous les noms »
   var bascule = document.getElementById("bascule-joueurs");
-  var listes = ze.querySelectorAll(".joueurs-details");
+  var nomsOuverts = true;
+  function listesJoueurs() { return ze.querySelectorAll(".joueurs-details"); }
   function majBascule() {
-    var ouvertes = Array.prototype.some.call(listes, function (d) { return d.open; });
+    var ouvertes = Array.prototype.some.call(listesJoueurs(), function (d) { return d.open; });
     bascule.textContent = ouvertes ? "Réduire les noms" : "Afficher les noms";
     bascule.setAttribute("aria-expanded", ouvertes ? "true" : "false");
   }
-  if (listes.length) {
-    bascule.hidden = false;
-    bascule.addEventListener("click", function () {
-      var ouvrir = bascule.getAttribute("aria-expanded") !== "true";
-      listes.forEach(function (d) { d.open = ouvrir; });
-      majBascule();
+  // Bouton « Réduire / Afficher tous les noms »
+  bascule.addEventListener("click", function () {
+    nomsOuverts = bascule.getAttribute("aria-expanded") !== "true";
+    listesJoueurs().forEach(function (d) { d.open = nomsOuverts; });
+    majBascule();
+  });
+
+  function rendreEquipes() {
+    ze.textContent = "";
+    D.equipes.forEach(function (eq) {
+      var corps;
+      if (eq.joueurs.length) {
+        var ul = el("ul", { classe: "joueurs" });
+        eq.joueurs.forEach(function (j) {
+          var li = el("li", null, [j.nom]);
+          if (j.capitaine) li.appendChild(el("abbr", { classe: "role", title: "Capitaine", style: "text-decoration:none", texte: "(C)" }));
+          if (j.gardien) li.appendChild(el("abbr", { classe: "role", title: "Gardien de but", style: "text-decoration:none", texte: "(GK)" }));
+          ul.appendChild(li);
+        });
+        corps = el("details", nomsOuverts ? { classe: "joueurs-details", open: "" } : { classe: "joueurs-details" }, [
+          el("summary", { texte: "Joueurs (" + eq.joueurs.length + ")" }),
+          ul
+        ]);
+        corps.addEventListener("toggle", majBascule);
+      } else {
+        corps = el("p", { classe: "liste-vide", texte: "Liste à venir" });
+      }
+      var staff = null;
+      if (eq.coach || eq.assistant) {
+        staff = el("dl", { classe: "staff" });
+        if (eq.coach) { staff.appendChild(el("dt", { texte: "Coach" })); staff.appendChild(el("dd", { texte: eq.coach })); }
+        if (eq.assistant) { staff.appendChild(el("dt", { texte: "Assistant coach" })); staff.appendChild(el("dd", { texte: eq.assistant })); }
+      }
+      ze.appendChild(el("article", { classe: "carte carte-equipe" }, [
+        el("header", null, [
+          el("h3", { texte: eq.nom }),
+          eq.groupe ? el("span", { classe: "etiquette", texte: "Groupe " + eq.groupe }) : null
+        ]),
+        corps,
+        staff
+      ]));
     });
-    listes.forEach(function (d) { d.addEventListener("toggle", majBascule); });
+    bascule.hidden = !listesJoueurs().length;
     majBascule();
   }
+
+  rendreTout();
+  chargerDonnees();
+  setInterval(function () { if (!document.hidden) chargerDonnees(); }, 30000);
+
+  // ---------- Portail admin ----------
+  (function () {
+    var dlg = document.getElementById("admin");
+    var corpsDlg = document.getElementById("admin-corps");
+    var login = document.getElementById("admin-login");
+    var champCode = document.getElementById("admin-code");
+    var panneau = document.getElementById("admin-panneau");
+    var zone = document.getElementById("admin-zone");
+    var msg = document.getElementById("admin-msg");
+    var barre = document.getElementById("admin-barre");
+    var etat = document.getElementById("admin-etat");
+    var btnEnr = document.getElementById("admin-enregistrer");
+    var onglets = Array.prototype.slice.call(dlg.querySelectorAll("[data-onglet]"));
+    var CLE = "tournoi-admin-code";
+
+    var brouillon = null;   // copie modifiable de D
+    var base = 0;           // version (maj) sur laquelle le brouillon est basé
+    var modifie = false;
+    var onglet = "calendrier";
+
+    function lireCode() { try { return sessionStorage.getItem(CLE) || ""; } catch (e) { return ""; } }
+    function ecrireCode(c) { try { c ? sessionStorage.setItem(CLE, c) : sessionStorage.removeItem(CLE); } catch (e) {} }
+
+    function appel(methode, chemin, corps) {
+      return fetch(API + chemin, {
+        method: methode,
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + lireCode() },
+        body: corps ? JSON.stringify(corps) : undefined
+      }).then(function (r) {
+        if (r.ok) return r.status === 204 ? null : r.json();
+        return r.json().catch(function () { return {}; }).then(function (d) {
+          var err = new Error(d.erreur || "Erreur " + r.status);
+          err.statut = r.status;
+          throw err;
+        });
+      });
+    }
+    function erreurAppel(err) {
+      if (err.statut === 401 || err.statut === 429) deconnecter(err.message);
+      else etat.textContent = err.message || "Erreur réseau.";
+    }
+
+    function afficher(connecte) {
+      login.hidden = connecte;
+      panneau.hidden = !connecte;
+      barre.hidden = !connecte;
+      if (connecte) {
+        brouillon = copie(D);
+        base = D.maj;
+        modifie = false;
+        btnEnr.disabled = true;
+        etat.textContent = "";
+        rendreAdmin(false);
+      } else {
+        champCode.value = "";
+        champCode.focus();
+      }
+    }
+    function deconnecter(texte) { ecrireCode(""); modifie = false; afficher(false); msg.textContent = texte || ""; }
+    function marquer() {
+      modifie = true;
+      btnEnr.disabled = false;
+      etat.textContent = "Modifications non enregistrées";
+    }
+
+    // --- Petits constructeurs de champs liés au brouillon ---
+    function champ(obj, cle, attrs) {
+      var i = el("input", Object.assign({ type: "text" }, attrs || {}));
+      i.value = obj[cle] == null ? "" : obj[cle];
+      i.addEventListener("input", function () { obj[cle] = i.value; marquer(); });
+      return i;
+    }
+    function choix(obj, cle, options) {
+      var s = el("select", null, options.map(function (o) { return el("option", { value: o[0], texte: o[1] }); }));
+      s.value = obj[cle];
+      s.addEventListener("change", function () { obj[cle] = s.value; marquer(); });
+      return s;
+    }
+    function coche(obj, cle, texte, titre) {
+      var c = el("input", { type: "checkbox", "aria-label": titre, title: titre });
+      c.checked = !!obj[cle];
+      c.addEventListener("change", function () { if (c.checked) obj[cle] = true; else delete obj[cle]; marquer(); });
+      return el("label", { classe: "admin-coche", title: titre }, [c, texte]);
+    }
+    function etiquette(texte, controle) { return el("label", { classe: "admin-champ" }, [el("span", { texte: texte }), controle]); }
+    function bouton(texte, classe, action, attrs) {
+      var b = el("button", Object.assign({ type: "button", classe: classe, texte: texte }, attrs || {}));
+      b.addEventListener("click", action);
+      return b;
+    }
+    function changer(action) { action(); marquer(); rendreAdmin(); }
+
+    function rendreAdmin(garderPosition) {
+      var y = corpsDlg.scrollTop;
+      onglets.forEach(function (b) { b.setAttribute("aria-selected", b.getAttribute("data-onglet") === onglet ? "true" : "false"); });
+      zone.textContent = "";
+      var noms = el("datalist", { id: "admin-noms" });
+      brouillon.equipes.forEach(function (e) { if (e.nom.trim()) noms.appendChild(el("option", { value: e.nom.trim() })); });
+      zone.appendChild(noms);
+      ({ calendrier: ongletCalendrier, equipes: ongletEquipes, reglages: ongletReglages })[onglet]();
+      corpsDlg.scrollTop = garderPosition === false ? 0 : y;
+    }
+
+    // --- Onglet Calendrier : semaines, matchs, scores, statuts ---
+    function ongletCalendrier() {
+      zone.appendChild(el("p", { classe: "admin-aide", texte: "Choisis « Live » pendant un match et « Terminé » à la fin : seuls les matchs terminés comptent dans les classements. N'oublie pas d'enregistrer." }));
+      brouillon.calendrier.forEach(function (sem, si) {
+        var bloc = el("section", { classe: "admin-bloc" }, [
+          el("div", { classe: "admin-ligne" }, [
+            etiquette("Titre de la semaine", champ(sem, "semaine", { placeholder: "Semaine 1 — 16 au 23 septembre" })),
+            bouton("Supprimer la semaine", "lien danger", function () {
+              if (sem.matchs.length && !confirm("Supprimer « " + (sem.semaine || "cette semaine") + " » et ses " + sem.matchs.length + " match(s) ?")) return;
+              changer(function () { brouillon.calendrier.splice(si, 1); });
+            })
+          ])
+        ]);
+        sem.matchs.forEach(function (m, mi) {
+          var carte = el("div", { classe: "admin-match" + (m.statut === "live" ? " est-live" : "") });
+          var statut = choix(m, "statut", [["a-venir", "À venir"], ["live", "Live"], ["termine", "Terminé"]]);
+          statut.addEventListener("change", function () { carte.className = "admin-match" + (m.statut === "live" ? " est-live" : ""); });
+          var nomsScore = function (cle) { return champ(m, cle, { type: "number", min: "0", max: "99", step: "1", inputmode: "numeric", classe: "court" }); };
+          carte.appendChild(el("div", { classe: "admin-grille" }, [
+            etiquette("Date", champ(m, "date", { placeholder: "Mercredi 16 septembre" })),
+            etiquette("Heure", champ(m, "heure", { placeholder: "12h45" })),
+            etiquette("Équipe A", champ(m, "equipeA", { list: "admin-noms", autocomplete: "off" })),
+            etiquette("Équipe B", champ(m, "equipeB", { list: "admin-noms", autocomplete: "off" }))
+          ]));
+          carte.appendChild(el("div", { classe: "admin-champs" }, [
+            etiquette("Buts A", nomsScore("scoreA")),
+            el("span", { classe: "tiret", texte: "–" }),
+            etiquette("Buts B", nomsScore("scoreB")),
+            etiquette("Statut", statut),
+            bouton("Supprimer", "lien danger", function () {
+              if (!confirm("Supprimer le match " + (m.equipeA || "?") + " vs " + (m.equipeB || "?") + " ?")) return;
+              changer(function () { sem.matchs.splice(mi, 1); });
+            })
+          ]));
+          bloc.appendChild(carte);
+        });
+        bloc.appendChild(bouton("+ Ajouter un match", "btn-secondaire", function () {
+          var dernier = sem.matchs[sem.matchs.length - 1] || {};
+          changer(function () {
+            sem.matchs.push({ date: dernier.date || "", heure: "", equipeA: "", equipeB: "", scoreA: null, scoreB: null, statut: "a-venir" });
+          });
+        }));
+        zone.appendChild(bloc);
+      });
+      zone.appendChild(bouton("+ Ajouter une semaine", "btn-secondaire", function () {
+        changer(function () { brouillon.calendrier.push({ semaine: "Semaine " + (brouillon.calendrier.length + 1), matchs: [] }); });
+      }));
+    }
+
+    // --- Onglet Équipes : nom, groupe, coachs, joueurs ---
+    function ongletEquipes() {
+      zone.appendChild(el("p", { classe: "admin-aide", texte: "Le groupe (A, B…) place l'équipe dans les classements. Renommer une équipe met aussi à jour ses matchs. C = capitaine, GK = gardien de but." }));
+      brouillon.equipes.forEach(function (eq, ei) {
+        var nom = champ(eq, "nom", { placeholder: "Nom de l'équipe" });
+        var nomAvant = eq.nom;
+        nom.addEventListener("change", function () {
+          var avant = nomAvant.trim(), apres = eq.nom.trim();
+          nomAvant = eq.nom;
+          if (!avant || !apres || avant === apres) return;
+          brouillon.calendrier.forEach(function (s) {
+            s.matchs.forEach(function (m) {
+              if (m.equipeA === avant) m.equipeA = apres;
+              if (m.equipeB === avant) m.equipeB = apres;
+            });
+          });
+        });
+        var bloc = el("section", { classe: "admin-bloc" }, [
+          el("div", { classe: "admin-grille" }, [
+            etiquette("Nom", nom),
+            etiquette("Groupe", champ(eq, "groupe", { maxlength: "3", placeholder: "A" })),
+            etiquette("Coach", champ(eq, "coach")),
+            etiquette("Assistant coach", champ(eq, "assistant"))
+          ]),
+          el("h4", { texte: "Joueurs (" + eq.joueurs.length + ")" })
+        ]);
+        eq.joueurs.forEach(function (j, ji) {
+          bloc.appendChild(el("div", { classe: "admin-joueur" }, [
+            champ(j, "nom", { placeholder: "Prénom Nom", "aria-label": "Nom du joueur" }),
+            coche(j, "capitaine", "C", "Capitaine"),
+            coche(j, "gardien", "GK", "Gardien de but"),
+            bouton("✕", "lien danger", function () {
+              changer(function () { eq.joueurs.splice(ji, 1); });
+            }, { "aria-label": "Retirer " + (j.nom || "ce joueur") })
+          ]));
+        });
+        bloc.appendChild(el("div", { classe: "admin-ligne" }, [
+          bouton("+ Ajouter un joueur", "btn-secondaire", function () {
+            changer(function () { eq.joueurs.push({ nom: "" }); });
+            var champs = zone.querySelectorAll(".admin-bloc")[ei].querySelectorAll(".admin-joueur input[type='text']");
+            if (champs.length) champs[champs.length - 1].focus();
+          }),
+          bouton("Supprimer l'équipe", "lien danger", function () {
+            if (!confirm("Supprimer l'équipe « " + (eq.nom || "sans nom") + " » ? Ses matchs restent dans le calendrier.")) return;
+            changer(function () { brouillon.equipes.splice(ei, 1); });
+          })
+        ]));
+        zone.appendChild(bloc);
+      });
+      zone.appendChild(bouton("+ Ajouter une équipe", "btn-secondaire", function () {
+        changer(function () { brouillon.equipes.push({ nom: "", groupe: "", joueurs: [], coach: "", assistant: "" }); });
+      }));
+    }
+
+    // --- Onglet Réglages ---
+    function ongletReglages() {
+      zone.appendChild(el("section", { classe: "admin-bloc" }, [
+        el("h4", { texte: "Revenir à data.js" }),
+        el("p", { classe: "admin-aide", texte: "Efface tout ce qui a été enregistré dans le portail (scores, matchs, équipes). Le site affichera de nouveau le contenu du fichier data.js." }),
+        bouton("Effacer et revenir à data.js", "btn danger", function () {
+          if (!confirm("Effacer toutes les modifications faites dans le portail ? C'est irréversible.")) return;
+          appel("DELETE", "/donnees")
+            .then(function () {
+              D = normaliser(T);
+              rendreTout();
+              afficher(true);
+              etat.textContent = "Données remises à zéro ✓";
+            })
+            .catch(erreurAppel);
+        }, { style: "justify-self:start" })
+      ]));
+      zone.appendChild(el("section", { classe: "admin-bloc" }, [
+        el("h4", { texte: "Session" }),
+        bouton("Se déconnecter", "btn-secondaire", function () {
+          if (modifie && !confirm("Se déconnecter sans enregistrer ?")) return;
+          deconnecter("");
+        })
+      ]));
+    }
+
+    // --- Enregistrement ---
+    function erreurs() {
+      var liste = [], vus = {};
+      brouillon.equipes.forEach(function (e) {
+        var n = e.nom.trim();
+        if (!n) liste.push("Une équipe n'a pas de nom (onglet Équipes).");
+        else if (vus[n]) liste.push("Deux équipes s'appellent « " + n + " ».");
+        vus[n] = true;
+      });
+      brouillon.calendrier.forEach(function (s) {
+        s.matchs.forEach(function (m) {
+          var a = normScore(m.scoreA), b = normScore(m.scoreB);
+          var qui = (m.equipeA || "?") + " vs " + (m.equipeB || "?");
+          if ((!vide(m.scoreA) && a === null) || (!vide(m.scoreB) && b === null)) liste.push(qui + " : score invalide (0 à 99).");
+          else if ((a === null) !== (b === null)) liste.push(qui + " : entre les deux scores (ou aucun).");
+        });
+      });
+      return liste;
+    }
+    function preparer() {
+      var d = copie(brouillon);
+      d.calendrier.forEach(function (s) {
+        s.semaine = s.semaine.trim();
+        s.matchs.forEach(function (m) {
+          ["date", "heure", "equipeA", "equipeB"].forEach(function (k) { m[k] = m[k].trim(); });
+          m.scoreA = normScore(m.scoreA);
+          m.scoreB = normScore(m.scoreB);
+        });
+      });
+      d.classements = {};
+      d.equipes.forEach(function (e) {
+        ["nom", "coach", "assistant"].forEach(function (k) { e[k] = e[k].trim(); });
+        e.groupe = e.groupe.trim().toUpperCase();
+        e.joueurs = e.joueurs.filter(function (j) { j.nom = j.nom.trim(); return j.nom; });
+        if (e.groupe) (d.classements[e.groupe] = d.classements[e.groupe] || []).push({ equipe: e.nom });
+      });
+      delete d.maj;
+      return d;
+    }
+
+    btnEnr.addEventListener("click", function () {
+      var e = erreurs();
+      if (e.length) { etat.textContent = e[0] + (e.length > 1 ? " (+" + (e.length - 1) + " autre" + (e.length > 2 ? "s" : "") + ")" : ""); return; }
+      btnEnr.disabled = true;
+      etat.textContent = "Enregistrement…";
+      appel("PUT", "/donnees", { donnees: preparer(), base: base })
+        .then(function (r) {
+          D = normaliser(r.donnees);
+          rendreTout();
+          brouillon = copie(D);
+          base = D.maj;
+          modifie = false;
+          rendreAdmin();
+          etat.textContent = "Enregistré ✓";
+        })
+        .catch(function (err) { btnEnr.disabled = false; erreurAppel(err); });
+    });
+
+    // --- Ouverture / fermeture ---
+    onglets.forEach(function (b) {
+      b.addEventListener("click", function () { onglet = b.getAttribute("data-onglet"); rendreAdmin(false); });
+    });
+
+    document.getElementById("btn-admin").addEventListener("click", function () {
+      msg.textContent = "";
+      if (!API) {
+        login.hidden = true; panneau.hidden = true; barre.hidden = true;
+        msg.textContent = "Le portail admin n'est pas configuré (voir « api » dans data.js).";
+        dlg.showModal();
+        return;
+      }
+      dlg.showModal();
+      if (lireCode()) chargerDonnees().then(function () { afficher(true); });
+      else afficher(false);
+    });
+
+    function fermerPermis() { return !modifie || confirm("Fermer sans enregistrer les modifications ?"); }
+    document.getElementById("admin-fermer").addEventListener("click", function () { if (fermerPermis()) dlg.close(); });
+    dlg.addEventListener("cancel", function (ev) { if (!fermerPermis()) ev.preventDefault(); });
+    dlg.addEventListener("close", function () { modifie = false; });
+
+    login.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var code = champCode.value.trim();
+      if (!/^\d{6}$/.test(code)) { msg.textContent = "Le code doit avoir 6 chiffres."; return; }
+      msg.textContent = "Vérification…";
+      ecrireCode(code);
+      appel("POST", "/login")
+        .then(function () { msg.textContent = ""; return chargerDonnees(); })
+        .then(function () { afficher(true); })
+        .catch(function (err) { deconnecter(err.message || "Erreur réseau."); });
+    });
+  })();
 })();
 </script>
 </body>
