@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tournoi 7v7 Brébeuf — Automne 2026</title>
+<meta name="description" content="Tournoi 7v7 de soccer du Collège Jean-de-Brébeuf, automne 2026 : fonctionnement, calendrier, classements, équipes et règlements.">
+<meta name="theme-color" content="#1a3fd4">
+<style>
+  :root {
+    --bleu: #1a3fd4;
+    --bleu-fonce: #1532b0;
+    --nuit: #16205c;
+    --nuit-2: #1d2a73;
+    --or: #ffc82e;
+    --blanc: #ffffff;
+    --gris: #c9d2f5;
+    --rayon: 16px;
+    --titre: "Bebas Neue", "Oswald", Impact, Haettenschweiler, "Arial Narrow Bold", "Arial Narrow", "Helvetica Neue", sans-serif;
+    --corps: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; -webkit-text-size-adjust: 100%; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    margin: 0;
+    font-family: var(--corps);
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--blanc);
+    background-color: var(--bleu);
+    /* Motif géométrique discret : bandes diagonales + losanges */
+    background-image:
+      repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 2px, transparent 2px 28px),
+      repeating-linear-gradient(45deg, rgba(0,0,0,.05) 0 2px, transparent 2px 28px);
+    overflow-x: hidden;
+  }
+
+  a { color: var(--or); }
+  a:hover { color: var(--blanc); }
+  :focus-visible { outline: 3px solid var(--or); outline-offset: 3px; border-radius: 4px; }
+
+  .lien-evitement {
+    position: absolute; left: -999px; top: 0;
+    background: var(--or); color: var(--nuit); padding: .5rem 1rem; font-weight: 700; z-index: 100;
+  }
+  .lien-evitement:focus { left: 1rem; top: 1rem; }
+
+  .conteneur { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 1rem; }
+
+  h1, h2, h3 {
+    font-family: var(--titre);
+    font-stretch: condensed;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    line-height: 1;
+    margin: 0;
+  }
+
+  /* ---------- En-tête ---------- */
+  .entete {
+    position: relative;
+    padding: 2.5rem 0 2rem;
+    text-align: center;
+    overflow: hidden;
+  }
+  .entete::before, .entete::after {
+    content: "";
+    position: absolute;
+    width: 260px; height: 260px;
+    border: 3px solid rgba(255,200,46,.25);
+    transform: rotate(45deg);
+    pointer-events: none;
+  }
+  .entete::before { top: -150px; left: -120px; }
+  .entete::after { bottom: -170px; right: -110px; border-color: rgba(255,255,255,.15); }
+
+  .college { margin: 0 0 .75rem; font-size: .8rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--gris); }
+  .entete h1 { font-size: clamp(3rem, 15vw, 6.5rem); text-shadow: 0 4px 0 var(--nuit); }
+  .entete h1 .or { color: var(--or); display: block; }
+  .sous-titre {
+    display: inline-block;
+    margin: 1rem 0 0;
+    padding: .3rem 1rem;
+    background: var(--or);
+    color: var(--nuit);
+    font-family: var(--titre);
+    font-stretch: condensed;
+    font-weight: 700;
+    font-size: clamp(1.4rem, 6vw, 2rem);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    border-radius: 8px;
+    transform: skewX(-8deg);
+  }
+  .sous-titre span { display: inline-block; transform: skewX(8deg); }
+  .dates { margin: 1.25rem 0 .25rem; font-family: var(--titre); font-stretch: condensed; font-weight: 700; font-size: clamp(1.5rem, 7vw, 2.25rem); text-transform: uppercase; }
+  .mention { margin: .25rem auto 1.25rem; max-width: 34rem; color: var(--gris); }
+  .mention strong { color: var(--blanc); }
+
+  .bouton {
+    display: inline-flex; align-items: center; gap: .5rem;
+    min-height: 44px;
+    padding: .6rem 1.2rem;
+    background: var(--nuit);
+    color: var(--blanc);
+    border: 2px solid var(--or);
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .bouton:hover { background: var(--or); color: var(--nuit); }
+  .bouton svg { width: 20px; height: 20px; flex: none; }
+
+  /* ---------- Navigation ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(22,32,92,.96);
+    border-bottom: 3px solid var(--or);
+    box-shadow: 0 4px 16px rgba(0,0,0,.25);
+  }
+  .nav ul {
+    list-style: none; margin: 0 auto; padding: .35rem .5rem;
+    max-width: 1080px;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .15rem .25rem;
+  }
+  .nav a {
+    display: block;
+    padding: .45rem .55rem;
+    color: var(--blanc);
+    text-decoration: none;
+    font-family: var(--titre);
+    font-stretch: condensed;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    border-radius: 8px;
+  }
+  .nav a:hover { background: var(--or); color: var(--nuit); }
+  @media (max-width: 380px) { .nav a { font-size: .95rem; padding: .4rem .4rem; } }
+
+  /* ---------- Sections ---------- */
+  main section { padding: 2.5rem 0 1rem; }
+  .titre-section {
+    display: flex; align-items: center; gap: .75rem;
+    font-size: clamp(2.2rem, 10vw, 3.25rem);
+    margin-bottom: 1.25rem;
+  }
+  .titre-section::before {
+    content: ""; flex: none;
+    width: 14px; height: 14px;
+    background: var(--or);
+    transform: rotate(45deg);
+  }
+
+  .grille { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grille-equipes { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  @media (max-width: 639px) {
+    .grille, .grille-equipes { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  .carte {
+    background: var(--nuit);
+    border-radius: var(--rayon);
+    padding: 1.25rem;
+    box-shadow: 0 8px 0 rgba(0,0,0,.18);
+    border: 1px solid rgba(255,255,255,.08);
+    min-width: 0;
+  }
+  .carte h3 { font-size: 1.9rem; color: var(--or); }
+
+  .etiquette {
+    display: inline-block;
+    padding: .1rem .55rem;
+    border-radius: 6px;
+    background: var(--or);
+    color: var(--nuit);
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* Fonctionnement du tournoi */
+  .format { display: grid; gap: 1rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  @media (max-width: 639px) { .format { grid-template-columns: minmax(0, 1fr); } }
+  .etape {
+    position: relative;
+    background: rgba(22,32,92,.55);
+    border: 2px solid rgba(255,200,46,.5);
+    border-radius: var(--rayon);
+    padding: 1rem 1.1rem;
+  }
+  .etape-num {
+    display: grid; place-items: center;
+    width: 2.2rem; height: 2.2rem; margin-bottom: .5rem;
+    background: var(--or); color: var(--nuit); border-radius: 50%;
+    font-family: var(--titre); font-stretch: condensed; font-weight: 700; font-size: 1.3rem;
+  }
+  .etape h3 { font-size: 1.6rem; color: var(--or); margin-bottom: .35rem; }
+  .etape p { margin: .25rem 0; }
+  .etape .points { color: var(--gris); font-size: .92rem; }
+  .etape .points strong { color: var(--blanc); }
+
+  /* Calendrier */
+  .semaine + .semaine { margin-top: 1.5rem; }
+  .semaine h3 { font-size: 1.6rem; margin-bottom: .75rem; color: var(--or); }
+  .matchs { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+  .match {
+    background: var(--nuit);
+    border-radius: var(--rayon);
+    padding: .9rem 1rem;
+    border-left: 6px solid var(--or);
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: .5rem 1rem;
+  }
+  .match-quand { color: var(--gris); font-size: .9rem; line-height: 1.3; }
+  .match-quand strong { display: block; color: var(--blanc); font-size: 1rem; }
+  .match-equipes { font-weight: 700; font-size: 1.05rem; display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .5rem; min-width: 0; }
+  .vs { font-family: var(--titre); font-stretch: condensed; color: var(--or); font-size: 1.1rem; text-transform: uppercase; }
+  .score {
+    font-family: var(--titre); font-stretch: condensed; font-weight: 700;
+    font-size: 1.6rem; line-height: 1;
+    background: var(--or); color: var(--nuit);
+    padding: .3rem .7rem; border-radius: 8px;
+    white-space: nowrap;
+  }
+  .a-venir {
+    font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+    color: var(--or); border: 2px solid var(--or); border-radius: 999px;
+    padding: .2rem .6rem; white-space: nowrap;
+  }
+  @media (max-width: 639px) {
+    .match { grid-template-columns: minmax(0, 1fr) auto; }
+    .match-quand { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0 .5rem; }
+    .match-quand strong { display: inline; }
+  }
+
+  /* Classements */
+  .tableau-wrap { overflow-x: auto; margin-top: .75rem; border-radius: 10px; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  caption { text-align: left; }
+  th, td { padding: .55rem .4rem; text-align: center; }
+  thead th {
+    font-size: .78rem; font-weight: 800; letter-spacing: .04em;
+    color: var(--nuit); background: var(--or);
+  }
+  thead th:first-child { border-radius: 8px 0 0 8px; }
+  thead th:last-child { border-radius: 0 8px 8px 0; }
+  tbody th { text-align: left; font-weight: 600; overflow-wrap: anywhere; }
+  tbody tr { border-bottom: 1px solid rgba(255,255,255,.12); }
+  tbody tr:last-child { border-bottom: 0; }
+  tbody tr:nth-child(2) { border-bottom: 2px dashed var(--or); }
+  td.pts { font-weight: 800; color: var(--or); font-size: 1.05rem; }
+  .rang { display: inline-block; min-width: 1.2rem; margin-right: .35rem; color: var(--gris); font-weight: 400; }
+  .note-tri { font-size: .85rem; color: var(--gris); margin: .75rem 0 0; }
+  @media (max-width: 639px) {
+    th, td { padding: .5rem .2rem; font-size: .85rem; }
+    thead th { font-size: .7rem; }
+    .carte-classement { padding: 1rem .6rem; }
+  }
+
+  /* Équipes */
+  .carte-equipe header { display: flex; justify-content: space-between; align-items: flex-start; gap: .5rem; }
+  .carte-equipe h3 { font-size: 1.7rem; overflow-wrap: anywhere; }
+  .outils-equipes { display: flex; justify-content: flex-end; margin: -.5rem 0 1rem; }
+  .outils-equipes .bouton { font: inherit; font-weight: 700; cursor: pointer; }
+  .grille-equipes { align-items: start; }
+  .joueurs-details { margin: 1rem 0; }
+  .joueurs-details summary {
+    cursor: pointer; list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+    min-height: 44px; padding: .25rem 0;
+    font-weight: 700; color: var(--gris);
+  }
+  .joueurs-details summary::-webkit-details-marker { display: none; }
+  .joueurs-details summary::after {
+    content: "−"; flex: none;
+    width: 1.75rem; height: 1.75rem; display: grid; place-items: center;
+    border: 2px solid var(--or); color: var(--or); border-radius: 50%;
+    font-weight: 800; line-height: 1;
+  }
+  .joueurs-details:not([open]) summary::after { content: "+"; }
+  .joueurs { list-style: none; margin: .25rem 0 0; padding: 0; }
+  .joueurs li { padding: .35rem 0; border-top: 1px solid rgba(255,255,255,.1); }
+  .role { color: var(--or); font-weight: 800; font-size: .85rem; margin-left: .25rem; }
+  .liste-vide { margin: 1rem 0; padding: .8rem; border: 2px dashed rgba(255,255,255,.25); border-radius: 10px; text-align: center; color: var(--gris); font-style: italic; }
+  .staff { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .2rem .75rem; font-size: .92rem; }
+  .staff dt { color: var(--gris); }
+  .staff dd { margin: 0; font-weight: 600; }
+
+  /* Règlements */
+  details.reglements { background: var(--nuit); border-radius: var(--rayon); overflow: hidden; }
+  details.reglements summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    padding: 1rem 1.25rem;
+    min-height: 44px;
+    font-family: var(--titre); font-stretch: condensed; font-weight: 700;
+    font-size: 1.5rem; text-transform: uppercase;
+    background: var(--nuit-2);
+  }
+  details.reglements summary::-webkit-details-marker { display: none; }
+  details.reglements summary::after {
+    content: "+"; flex: none;
+    width: 2rem; height: 2rem; display: grid; place-items: center;
+    background: var(--or); color: var(--nuit); border-radius: 50%;
+    font-family: var(--corps); font-size: 1.4rem; font-weight: 800; line-height: 1;
+  }
+  details.reglements[open] summary::after { content: "−"; }
+  .reglements-contenu { padding: .5rem 1.25rem 1.5rem; }
+  .reglements-contenu h3 { font-size: 1.6rem; color: var(--or); margin: 1.25rem 0 .5rem; }
+  .reglements-contenu ul { margin: 0; padding-left: 1.25rem; }
+  .reglements-contenu li { margin: .35rem 0; }
+  .reglements-contenu li::marker { color: var(--or); }
+  .reglements-contenu ul ul { margin-top: .25rem; }
+
+  /* Pied de page */
+  .pied {
+    margin-top: 3rem;
+    padding: 2rem 0 2.5rem;
+    background: var(--nuit);
+    border-top: 4px solid var(--or);
+    text-align: center;
+    position: relative;
+  }
+  .pied .credit {
+    position: absolute;
+    right: 1rem;
+    bottom: .75rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .85rem;
+    color: var(--gris);
+  }
+  .pied .credit a { display: block; line-height: 0; border-radius: 50%; transition: transform .2s; }
+  .pied .credit a:hover, .pied .credit a:focus-visible { transform: scale(1.08); }
+  @media (max-width: 600px) {
+    .pied .credit { position: static; justify-content: center; margin-top: 1.25rem; }
+  }
+  .pied h2 { font-size: 2rem; margin-bottom: .75rem; }
+  .pied p { margin: .35rem 0; }
+  .pied a { font-weight: 700; overflow-wrap: anywhere; }
+  .erreur { background: var(--nuit); border: 2px solid var(--or); border-radius: var(--rayon); padding: 1rem; }
+</style>
+</head>
+<body>
+<a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+<header class="entete">
+  <div class="conteneur">
+    <p class="college">Collège Jean-de-Brébeuf</p>
+    <h1>Tournoi 7v7 <span class="or">Brébeuf</span></h1>
+    <p class="sous-titre"><span>Automne 2026</span></p>
+    <p class="dates"><time datetime="2026-09-14">14 septembre</time> – <time datetime="2026-10-16">16 octobre</time></p>
+    <p class="mention">Matchs pendant le dîner à partir de <strong>12h45</strong></p>
+    <a class="bouton" href="https://www.instagram.com/tournoi_foot_breb" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      @tournoi_foot_breb
+    </a>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Sections">
+  <ul>
+    <li><a href="#fonctionnement">Fonctionnement</a></li>
+    <li><a href="#calendrier">Calendrier</a></li>
+    <li><a href="#classements">Classements</a></li>
+    <li><a href="#equipes">Équipes</a></li>
+    <li><a href="#reglements">Règlements</a></li>
+  </ul>
+</nav>
+
+<main id="contenu" class="conteneur">
+  <noscript><p class="erreur">JavaScript est nécessaire pour afficher le calendrier, les classements et les équipes.</p></noscript>
+
+  <section id="fonctionnement" aria-labelledby="titre-fonctionnement">
+    <h2 class="titre-section" id="titre-fonctionnement">Fonctionnement</h2>
+
+    <div class="format">
+      <div class="etape">
+        <span class="etape-num">1</span>
+        <h3>Phase de groupes</h3>
+        <p>2 groupes de 4 équipes. Chaque équipe joue 3 matchs contre les autres équipes de son groupe.</p>
+        <p class="points"><strong>Victoire 3 pts</strong> · <strong>Nul 1 pt</strong> · <strong>Défaite 0 pt</strong></p>
+      </div>
+      <div class="etape">
+        <span class="etape-num">2</span>
+        <h3>Demi-finales</h3>
+        <p>Les 2 meilleures équipes de chaque groupe se qualifient pour les demi-finales.</p>
+      </div>
+      <div class="etape">
+        <span class="etape-num">3</span>
+        <h3>Finale</h3>
+        <p>Les gagnants des demi-finales s'affrontent en finale pour déterminer le champion du tournoi.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="calendrier" aria-labelledby="titre-calendrier">
+    <h2 class="titre-section" id="titre-calendrier">Calendrier</h2>
+    <div id="zone-calendrier"></div>
+  </section>
+
+  <section id="classements" aria-labelledby="titre-classements">
+    <h2 class="titre-section" id="titre-classements">Classements</h2>
+    <div class="grille" id="zone-classements"></div>
+    <p class="note-tri">MJ : matchs joués · V : victoires · N : nuls · D : défaites · BP : buts pour · BC : buts contre · DB : différence de buts · PTS : points (victoire 3, nul 1). Classement par PTS, puis DB. Les 2 premières équipes de chaque groupe (au-dessus du pointillé) se qualifient pour les demi-finales.</p>
+  </section>
+
+  <section id="equipes" aria-labelledby="titre-equipes">
+    <h2 class="titre-section" id="titre-equipes">Équipes</h2>
+    <div class="outils-equipes">
+      <button type="button" class="bouton" id="bascule-joueurs" aria-controls="zone-equipes" hidden>Réduire les noms</button>
+    </div>
+    <div class="grille-equipes" id="zone-equipes"></div>
+  </section>
+
+  <section id="reglements" aria-labelledby="titre-reglements">
+    <h2 class="titre-section" id="titre-reglements">Règlements</h2>
+    <details class="reglements">
+      <summary>Lire le règlement</summary>
+      <div class="reglements-contenu">
+        <h3>Code vestimentaire</h3>
+        <ul>
+          <li>Crampons interdits (naturel et turf)</li>
+          <li>Souliers de course et chaussettes autorisés</li>
+          <li>Protège-tibias recommandés (non obligatoires)</li>
+          <li>Aucun bijou (montre, chaîne, bracelets, etc.)</li>
+        </ul>
+
+        <h3>Règles de jeu</h3>
+        <ul>
+          <li>Pas de hors-jeu</li>
+          <li>Touches : peuvent être effectuées avec les mains ou les pieds</li>
+          <li>7 joueurs maximum sur le terrain par équipe (incluant le gardien)</li>
+          <li>Minimum 5 joueurs pour débuter un match</li>
+          <li>Remplacements illimités :
+            <ul>
+              <li>doivent être approuvés par l'arbitre de touche</li>
+              <li>se font uniquement lors d'un arrêt de jeu</li>
+              <li>le gardien peut être sorti</li>
+            </ul>
+          </li>
+          <li>Remise en jeu :
+            <ul>
+              <li>coup franc : tous les coups francs peuvent être tirés</li>
+              <li>distance du mur 5 mètres</li>
+              <li>coup d'envoi au centre</li>
+            </ul>
+          </li>
+          <li>Temps mort (timeout) :
+            <ul>
+              <li>1 par équipe par partie</li>
+              <li>durée : 1 minute</li>
+            </ul>
+          </li>
+        </ul>
+        <!-- TODO: règlements page 2 -->
+      </div>
+    </details>
+  </section>
+</main>
+
+<footer class="pied">
+  <div class="conteneur">
+    <h2>Contact</h2>
+    <p><a href="mailto:tournoifootbreb27@gmail.com">tournoifootbreb27@gmail.com</a></p>
+    <p><a href="https://www.instagram.com/tournoi_foot_breb" rel="noopener">@tournoi_foot_breb</a> sur Instagram</p>  </div>
+  <p class="credit">
+    site par
+    <a href="https://manndev.com" rel="noopener" aria-label="manndev.com">
+      <svg viewBox="0 0 100 100" width="40" height="40" aria-hidden="true">
+        <circle cx="50" cy="50" r="50" fill="#232a36"/>
+        <circle cx="50" cy="50" r="41" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-dasharray="0.1 8.2"/>
+        <text x="50" y="62" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="34" fill="#fff">m<tspan fill="#f2b632">/</tspan>d</text>
+      </svg>
+    </a>
+  </p>
+</footer>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  "use strict";
+  var T = window.TOURNOI;
+
+  function el(tag, attrs, enfants) {
+    var n = document.createElement(tag);
+    if (attrs) for (var k in attrs) {
+      if (k === "texte") n.textContent = attrs[k];
+      else if (k === "classe") n.className = attrs[k];
+      else n.setAttribute(k, attrs[k]);
+    }
+    (enfants || []).forEach(function (c) {
+      if (c == null) return;
+      n.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
+    });
+    return n;
+  }
+  function vide(v) { return v === null || v === undefined || v === ""; }
+  function lettres(obj) { return Object.keys(obj || {}).sort(); }
+
+  if (!T) {
+    document.getElementById("zone-calendrier").appendChild(
+      el("p", { classe: "erreur", texte: "Impossible de charger data.js. Vérifie que le fichier est dans le même dossier que index.html." })
+    );
+    return;
+  }
+
+  // ---------- Calendrier ----------
+  var zc = document.getElementById("zone-calendrier");
+  (T.calendrier || []).forEach(function (sem) {
+    var ul = el("ul", { classe: "matchs" });
+    (sem.matchs || []).forEach(function (m) {
+      var joue = !vide(m.scoreA) && !vide(m.scoreB);
+      var resultat = joue
+        ? el("span", { classe: "score", "aria-label": "Score : " + m.scoreA + " à " + m.scoreB, texte: m.scoreA + " – " + m.scoreB })
+        : el("span", { classe: "a-venir", texte: "à venir" });
+      ul.appendChild(el("li", { classe: "match" }, [
+        el("div", { classe: "match-quand" }, [el("strong", { texte: m.date }), el("span", { texte: m.heure })]),
+        el("div", { classe: "match-equipes" }, [
+          el("span", { texte: m.equipeA }), el("span", { classe: "vs", texte: "vs" }), el("span", { texte: m.equipeB })
+        ]),
+        resultat
+      ]));
+    });
+    zc.appendChild(el("div", { classe: "semaine" }, [el("h3", { texte: sem.semaine }), ul]));
+  });
+  if (!(T.calendrier || []).length) zc.appendChild(el("p", { texte: "Calendrier à venir." }));
+
+  // ---------- Classements ----------
+  var zcl = document.getElementById("zone-classements");
+  lettres(T.classements).forEach(function (g) {
+    var lignes = T.classements[g].map(function (r) {
+      var v = +r.v || 0, n = +r.n || 0, d = +r.d || 0, bp = +r.bp || 0, bc = +r.bc || 0;
+      return { equipe: r.equipe, mj: v + n + d, v: v, n: n, d: d, bp: bp, bc: bc, db: bp - bc, pts: 3 * v + n };
+    });
+    lignes.sort(function (a, b) { return b.pts - a.pts || b.db - a.db || b.bp - a.bp; });
+
+    var cols = [["MJ", "Matchs joués"], ["V", "Victoires"], ["N", "Nuls"], ["D", "Défaites"], ["BP", "Buts pour"], ["BC", "Buts contre"], ["DB", "Différence de buts"], ["PTS", "Points"]];
+    var trh = el("tr", null, [el("th", { scope: "col", texte: "Équipe" })]);
+    cols.forEach(function (c) { trh.appendChild(el("th", { scope: "col" }, [el("abbr", { title: c[1], style: "text-decoration:none", texte: c[0] })])); });
+
+    var tbody = el("tbody");
+    lignes.forEach(function (r, i) {
+      var tr = el("tr", null, [el("th", { scope: "row" }, [el("span", { classe: "rang", texte: (i + 1) + "." }), r.equipe])]);
+      ["mj", "v", "n", "d", "bp", "bc", "db", "pts"].forEach(function (k) {
+        var val = k === "db" && r.db > 0 ? "+" + r.db : String(r[k]);
+        tr.appendChild(el("td", k === "pts" ? { classe: "pts", texte: val } : { texte: val }));
+      });
+      tbody.appendChild(tr);
+    });
+
+    var table = el("table", null, [
+      el("caption", null, [el("h3", { texte: "Groupe " + g })]),
+      el("thead", null, [trh]),
+      tbody
+    ]);
+    zcl.appendChild(el("article", { classe: "carte carte-classement" }, [el("div", { classe: "tableau-wrap" }, [table])]));
+  });
+
+  // ---------- Équipes ----------
+  var ze = document.getElementById("zone-equipes");
+  (T.equipes || []).forEach(function (eq) {
+    var corps;
+    if (eq.joueurs && eq.joueurs.length) {
+      var ul = el("ul", { classe: "joueurs" });
+      eq.joueurs.forEach(function (j) {
+        var li = el("li", null, [j.nom]);
+        if (j.capitaine) li.appendChild(el("abbr", { classe: "role", title: "Capitaine", style: "text-decoration:none", texte: "(C)" }));
+        if (j.gardien) li.appendChild(el("abbr", { classe: "role", title: "Gardien de but", style: "text-decoration:none", texte: "(GK)" }));
+        ul.appendChild(li);
+      });
+      corps = el("details", { classe: "joueurs-details", open: "" }, [
+        el("summary", { texte: "Joueurs (" + eq.joueurs.length + ")" }),
+        ul
+      ]);
+    } else {
+      corps = el("p", { classe: "liste-vide", texte: "Liste à venir" });
+    }
+    var staff = null;
+    if (eq.coach || eq.assistant) {
+      staff = el("dl", { classe: "staff" });
+      if (eq.coach) { staff.appendChild(el("dt", { texte: "Coach" })); staff.appendChild(el("dd", { texte: eq.coach })); }
+      if (eq.assistant) { staff.appendChild(el("dt", { texte: "Assistant coach" })); staff.appendChild(el("dd", { texte: eq.assistant })); }
+    }
+    ze.appendChild(el("article", { classe: "carte carte-equipe" }, [
+      el("header", null, [
+        el("h3", { texte: eq.nom }),
+        el("span", { classe: "etiquette", texte: "Groupe " + eq.groupe })
+      ]),
+      corps,
+      staff
+    ]));
+  });
+
+  // Bouton « Réduire / Afficher tous les noms »
+  var bascule = document.getElementById("bascule-joueurs");
+  var listes = ze.querySelectorAll(".joueurs-details");
+  function majBascule() {
+    var ouvertes = Array.prototype.some.call(listes, function (d) { return d.open; });
+    bascule.textContent = ouvertes ? "Réduire les noms" : "Afficher les noms";
+    bascule.setAttribute("aria-expanded", ouvertes ? "true" : "false");
+  }
+  if (listes.length) {
+    bascule.hidden = false;
+    bascule.addEventListener("click", function () {
+      var ouvrir = bascule.getAttribute("aria-expanded") !== "true";
+      listes.forEach(function (d) { d.open = ouvrir; });
+      majBascule();
+    });
+    listes.forEach(function (d) { d.addEventListener("toggle", majBascule); });
+    majBascule();
+  }
+})();
+</script>
+</body>
+</html>
