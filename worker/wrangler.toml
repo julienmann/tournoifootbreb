@@ -1,0 +1,14 @@
+name = "tournoi-brebeuf-api"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+# Remplace par l'adresse du site (ex. "https://tournoi.exemple.com") pour bloquer les autres sites.
+ORIGINE = "*"
+
+[[kv_namespaces]]
+binding = "SCORES"
+id = "56576e9ff08d4b0ca253bc111446cc6e"   # donné par : npx wrangler kv namespace create SCORES
+
+# Le code admin à 6 chiffres est un secret (jamais dans ce fichier) :
+#   npx wrangler secret put ADMIN_CODE

@@ -5,6 +5,10 @@
 // =====================================================================
 
 window.TOURNOI = {
+  // Adresse du Worker Cloudflare (portail admin, scores en direct).
+  // Laisse "" pour utiliser seulement les scores écrits dans ce fichier.
+  api: "https://tournoi-brebeuf-api.jmdashboard.workers.dev",
+
   // ---------------------------------------------------------------
   // CALENDRIER — un bloc par semaine.
   // Score : mets des nombres dans scoreA / scoreB une fois le match joué.
@@ -30,22 +34,22 @@ window.TOURNOI = {
   ],
 
   // ---------------------------------------------------------------
-  // CLASSEMENTS — V, N, D, BP, BC à saisir à la main.
-  // MJ (= V+N+D), DB (= BP−BC) et PTS (= 3×V + N) sont calculés
-  // automatiquement. Le tri se fait par PTS, puis DB, puis BP.
+  // CLASSEMENTS — la liste des équipes de chaque groupe.
+  // Tout (MJ, V, N, D, BP, BC, DB, PTS) est calculé à partir des matchs
+  // « Terminé » du calendrier. Le tri se fait par PTS, puis DB, puis BP.
   // ---------------------------------------------------------------
   classements: {
     A: [
-      { equipe: "BI Élite",       v: 0, n: 0, d: 0, bp: 0, bc: 0 },
-      { equipe: "FC Sans Mounes", v: 0, n: 0, d: 0, bp: 0, bc: 0 },
-      { equipe: "SLA FC",         v: 0, n: 0, d: 0, bp: 0, bc: 0 },
-      { equipe: "Les Penguez",    v: 0, n: 0, d: 0, bp: 0, bc: 0 },
+      { equipe: "BI Élite" },
+      { equipe: "FC Sans Mounes" },
+      { equipe: "SLA FC" },
+      { equipe: "Les Penguez" },
     ],
     B: [
-      { equipe: "FC Babakar",     v: 0, n: 0, d: 0, bp: 0, bc: 0 },
-      { equipe: "Maisonnée FC",   v: 0, n: 0, d: 0, bp: 0, bc: 0 },
-      { equipe: "FC Haramball",   v: 0, n: 0, d: 0, bp: 0, bc: 0 },
-      { equipe: "La Famé FC",     v: 0, n: 0, d: 0, bp: 0, bc: 0 },
+      { equipe: "FC Babakar" },
+      { equipe: "Maisonnée FC" },
+      { equipe: "FC Haramball" },
+      { equipe: "La Famé FC" },
     ],
   },
 

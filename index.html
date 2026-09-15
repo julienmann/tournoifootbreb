@@ -238,6 +238,19 @@
     color: var(--or); border: 2px solid var(--or); border-radius: 999px;
     padding: .2rem .6rem; white-space: nowrap;
   }
+  .resultat { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; justify-content: flex-end; }
+  .live {
+    font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+    background: #e5243b; color: var(--blanc); border-radius: 999px;
+    padding: .25rem .6rem; white-space: nowrap; display: inline-flex; align-items: center; gap: .35rem;
+  }
+  .live::before { content: ""; width: .5rem; height: .5rem; border-radius: 50%; background: var(--blanc); animation: pulse 1.2s infinite; }
+  @keyframes pulse { 50% { opacity: .25; } }
+  @media (prefers-reduced-motion: reduce) { .live::before { animation: none; } }
+  .match.est-live { border-left-color: #e5243b; }
+  .en-direct h3 { color: var(--blanc); display: flex; align-items: center; gap: .5rem; }
+  .en-direct h3::before { content: ""; width: .65rem; height: .65rem; border-radius: 50%; background: #e5243b; animation: pulse 1.2s infinite; }
+  .en-direct .match { box-shadow: 0 0 0 2px #e5243b; }
   @media (max-width: 639px) {
     .match { grid-template-columns: minmax(0, 1fr) auto; }
     .match-quand { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0 .5rem; }
@@ -353,6 +366,41 @@
   .pied p { margin: .35rem 0; }
   .pied a { font-weight: 700; overflow-wrap: anywhere; }
   .erreur { background: var(--nuit); border: 2px solid var(--or); border-radius: var(--rayon); padding: 1rem; }
+
+  /* Admin */
+  .btn-admin {
+    position: absolute; left: 1rem; bottom: .75rem;
+    background: none; border: 1px solid rgba(201, 210, 245, .35); border-radius: 999px;
+    color: var(--gris); font: inherit; font-size: .75rem; padding: .15rem .6rem; cursor: pointer; opacity: .7;
+  }
+  .btn-admin:hover, .btn-admin:focus-visible { opacity: 1; border-color: var(--or); color: var(--or); }
+  @media (max-width: 600px) { .btn-admin { position: static; margin-top: 1rem; } }
+  .admin {
+    width: min(44rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem);
+    background: var(--nuit); color: var(--blanc);
+    border: 2px solid var(--or); border-radius: var(--rayon); padding: 0;
+  }
+  .admin [hidden] { display: none; }
+  .admin::backdrop { background: rgba(10, 15, 50, .75); }
+  .admin-tete { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.25rem; border-bottom: 1px solid var(--nuit-2); position: sticky; top: 0; background: var(--nuit); z-index: 1; }
+  .admin-tete h2 { font-size: 1.8rem; margin: 0; }
+  .admin-corps { padding: 1rem 1.25rem 1.25rem; }
+  .admin button.btn { background: var(--or); color: var(--nuit); border: 0; border-radius: 8px; font: inherit; font-weight: 700; padding: .5rem .9rem; cursor: pointer; }
+  .admin button.btn:disabled { opacity: .5; cursor: default; }
+  .admin button.lien { background: none; border: 0; color: var(--gris); font: inherit; text-decoration: underline; cursor: pointer; padding: .25rem; }
+  .admin input, .admin select { font: inherit; font-size: 1rem; background: var(--blanc); color: var(--nuit); border: 2px solid transparent; border-radius: 8px; padding: .4rem .5rem; }
+  .admin input:focus-visible, .admin select:focus-visible { outline: none; border-color: var(--or); }
+  .code-form { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+  .code-form input { width: 9rem; letter-spacing: .3em; text-align: center; font-size: 1.3rem; }
+  .admin-msg { min-height: 1.4rem; margin: .5rem 0 0; color: var(--or); font-size: .9rem; }
+  .admin-semaine { font-size: 1.3rem; color: var(--or); margin: 1rem 0 .5rem; }
+  .admin-match { background: var(--nuit-2); border-radius: 10px; padding: .75rem; display: grid; gap: .5rem; }
+  .admin-match + .admin-match { margin-top: .5rem; }
+  .admin-match .qui { font-weight: 700; }
+  .admin-match .qui small { display: block; font-weight: 400; color: var(--gris); }
+  .admin-champs { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+  .admin-champs input { width: 3.5rem; text-align: center; }
+  .admin-champs .etat { font-size: .85rem; color: var(--gris); }
 </style>
 </head>
 <body>
@@ -488,7 +536,27 @@
       </svg>
     </a>
   </p>
+  <button type="button" class="btn-admin" id="btn-admin">admin</button>
 </footer>
+
+<dialog class="admin" id="admin" aria-labelledby="admin-titre">
+  <div class="admin-tete">
+    <h2 id="admin-titre">Admin</h2>
+    <button type="button" class="lien" id="admin-fermer">Fermer</button>
+  </div>
+  <div class="admin-corps">
+    <form class="code-form" id="admin-login">
+      <label for="admin-code">Code à 6 chiffres</label>
+      <input id="admin-code" type="password" inputmode="numeric" autocomplete="off" pattern="\d{6}" maxlength="6" required>
+      <button class="btn" type="submit">Entrer</button>
+    </form>
+    <div id="admin-panneau" hidden>
+      <button type="button" class="lien" id="admin-deco">Se déconnecter</button>
+      <div id="admin-liste"></div>
+    </div>
+    <p class="admin-msg" id="admin-msg" role="status"></p>
+  </div>
+</dialog>
 
 <script src="data.js"></script>
 <script>
@@ -520,56 +588,228 @@
   }
 
   // ---------- Calendrier ----------
+  // Les scores/statuts venant du portail admin (API) remplacent ceux de data.js.
+  var API = (T.api || "").replace(/\/+$/, "");
+  var enDirect = {};
+
+  function idMatch(m) { return [m.date, m.heure, m.equipeA, m.equipeB].join("|"); }
+  function etatMatch(m) {
+    var e = enDirect[idMatch(m)] || {};
+    var a = e.statut ? e.scoreA : m.scoreA, b = e.statut ? e.scoreB : m.scoreB;
+    var joue = !vide(a) && !vide(b);
+    return { scoreA: joue ? a : null, scoreB: joue ? b : null, statut: e.statut || (joue ? "termine" : "a-venir") };
+  }
+
   var zc = document.getElementById("zone-calendrier");
-  (T.calendrier || []).forEach(function (sem) {
-    var ul = el("ul", { classe: "matchs" });
-    (sem.matchs || []).forEach(function (m) {
-      var joue = !vide(m.scoreA) && !vide(m.scoreB);
-      var resultat = joue
-        ? el("span", { classe: "score", "aria-label": "Score : " + m.scoreA + " à " + m.scoreB, texte: m.scoreA + " – " + m.scoreB })
-        : el("span", { classe: "a-venir", texte: "à venir" });
-      ul.appendChild(el("li", { classe: "match" }, [
-        el("div", { classe: "match-quand" }, [el("strong", { texte: m.date }), el("span", { texte: m.heure })]),
-        el("div", { classe: "match-equipes" }, [
-          el("span", { texte: m.equipeA }), el("span", { classe: "vs", texte: "vs" }), el("span", { texte: m.equipeB })
-        ]),
-        resultat
-      ]));
+  function rendreCalendrier() {
+    zc.textContent = "";
+    var enCours = el("ul", { classe: "matchs" });
+    (T.calendrier || []).forEach(function (sem) {
+      var ul = el("ul", { classe: "matchs" });
+      (sem.matchs || []).forEach(function (m) {
+        ul.appendChild(carteMatch(m));
+        if (etatMatch(m).statut === "live") enCours.appendChild(carteMatch(m));
+      });
+      zc.appendChild(el("div", { classe: "semaine" }, [el("h3", { texte: sem.semaine }), ul]));
     });
-    zc.appendChild(el("div", { classe: "semaine" }, [el("h3", { texte: sem.semaine }), ul]));
-  });
-  if (!(T.calendrier || []).length) zc.appendChild(el("p", { texte: "Calendrier à venir." }));
+    if (enCours.children.length) {
+      zc.insertBefore(el("div", { classe: "semaine en-direct" }, [el("h3", { texte: "En direct" }), enCours]), zc.firstChild);
+    }
+    if (!(T.calendrier || []).length) zc.appendChild(el("p", { texte: "Calendrier à venir." }));
+    rendreClassements();
+  }
+
+  function carteMatch(m) {
+    var e = etatMatch(m);
+    var score = e.scoreA === null ? null
+      : el("span", { classe: "score", "aria-label": "Score : " + e.scoreA + " à " + e.scoreB, texte: e.scoreA + " – " + e.scoreB });
+    var resultat;
+    if (e.statut === "live") resultat = el("span", { classe: "resultat" }, [el("span", { classe: "live", texte: "Live" }), score]);
+    else if (e.statut === "termine" && score) resultat = score;
+    else resultat = el("span", { classe: "a-venir", texte: e.statut === "termine" ? "terminé" : "à venir" });
+    return el("li", { classe: "match" + (e.statut === "live" ? " est-live" : "") }, [
+      el("div", { classe: "match-quand" }, [el("strong", { texte: m.date }), el("span", { texte: m.heure })]),
+      el("div", { classe: "match-equipes" }, [
+        el("span", { texte: m.equipeA }), el("span", { classe: "vs", texte: "vs" }), el("span", { texte: m.equipeB })
+      ]),
+      resultat
+    ]);
+  }
+  rendreCalendrier();
+
+  function chargerEnDirect() {
+    if (!API) return Promise.resolve();
+    return fetch(API + "/matchs", { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { if (d) { enDirect = d; rendreCalendrier(); } })
+      .catch(function () {});
+  }
+  chargerEnDirect();
+  setInterval(function () { if (!document.hidden) chargerEnDirect(); }, 30000);
+
+  // ---------- Portail admin ----------
+  (function () {
+    var dlg = document.getElementById("admin");
+    var login = document.getElementById("admin-login");
+    var champCode = document.getElementById("admin-code");
+    var panneau = document.getElementById("admin-panneau");
+    var liste = document.getElementById("admin-liste");
+    var msg = document.getElementById("admin-msg");
+    var CLE = "tournoi-admin-code";
+
+    function lireCode() { try { return sessionStorage.getItem(CLE) || ""; } catch (e) { return ""; } }
+    function ecrireCode(c) { try { c ? sessionStorage.setItem(CLE, c) : sessionStorage.removeItem(CLE); } catch (e) {} }
+
+    function appel(methode, chemin, corps) {
+      return fetch(API + chemin, {
+        method: methode,
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + lireCode() },
+        body: corps ? JSON.stringify(corps) : undefined
+      }).then(function (r) {
+        if (r.ok) return r.status === 204 ? null : r.json();
+        return r.json().catch(function () { return {}; }).then(function (d) {
+          var err = new Error(d.erreur || "Erreur " + r.status);
+          err.statut = r.status;
+          throw err;
+        });
+      });
+    }
+
+    function afficher(connecte) {
+      login.hidden = connecte;
+      panneau.hidden = !connecte;
+      if (connecte) rendreListe(); else { champCode.value = ""; champCode.focus(); }
+    }
+
+    function deconnecter(texte) { ecrireCode(""); afficher(false); msg.textContent = texte || ""; }
+
+    function rendreListe() {
+      liste.textContent = "";
+      (T.calendrier || []).forEach(function (sem) {
+        liste.appendChild(el("h3", { classe: "admin-semaine", texte: sem.semaine }));
+        (sem.matchs || []).forEach(function (m) {
+          var e = etatMatch(m);
+          var id = idMatch(m).replace(/[^\w]+/g, "-");
+          var inA = el("input", { type: "number", min: "0", max: "99", inputmode: "numeric", id: "sa-" + id, "aria-label": "Buts " + m.equipeA });
+          var inB = el("input", { type: "number", min: "0", max: "99", inputmode: "numeric", id: "sb-" + id, "aria-label": "Buts " + m.equipeB });
+          inA.value = e.scoreA === null ? "" : e.scoreA;
+          inB.value = e.scoreB === null ? "" : e.scoreB;
+          var sel = el("select", { "aria-label": "Statut" }, [
+            el("option", { value: "a-venir", texte: "À venir" }),
+            el("option", { value: "live", texte: "Live" }),
+            el("option", { value: "termine", texte: "Terminé" })
+          ]);
+          sel.value = e.statut;
+          var btn = el("button", { classe: "btn", type: "button", texte: "Enregistrer" });
+          var etat = el("span", { classe: "etat", role: "status" });
+
+          btn.addEventListener("click", function () {
+            var a = inA.value === "" ? null : +inA.value, b = inB.value === "" ? null : +inB.value;
+            var ok = function (v) { return v === null || (Number.isInteger(v) && v >= 0 && v <= 99); };
+            if (!ok(a) || !ok(b)) { etat.textContent = "Score invalide (0 à 99)."; return; }
+            if ((a === null) !== (b === null)) { etat.textContent = "Entre les deux scores (ou aucun)."; return; }
+            btn.disabled = true;
+            etat.textContent = "Enregistrement…";
+            appel("PUT", "/matchs", { id: idMatch(m), scoreA: a, scoreB: b, statut: sel.value })
+              .then(function (r) {
+                enDirect[idMatch(m)] = r;
+                rendreCalendrier();
+                etat.textContent = "Enregistré ✓";
+              })
+              .catch(function (err) {
+                if (err.statut === 401 || err.statut === 429) deconnecter(err.message);
+                else etat.textContent = err.message || "Erreur réseau.";
+              })
+              .then(function () { btn.disabled = false; });
+          });
+
+          liste.appendChild(el("div", { classe: "admin-match" }, [
+            el("div", { classe: "qui" }, [m.equipeA + " vs " + m.equipeB, el("small", { texte: m.date + " · " + m.heure })]),
+            el("div", { classe: "admin-champs" }, [
+              el("label", { "for": "sa-" + id, classe: "etat", texte: m.equipeA }), inA,
+              el("span", { texte: "–" }),
+              inB, el("label", { "for": "sb-" + id, classe: "etat", texte: m.equipeB }),
+              sel, btn, etat
+            ])
+          ]));
+        });
+      });
+    }
+
+    document.getElementById("btn-admin").addEventListener("click", function () {
+      msg.textContent = "";
+      if (!API) {
+        login.hidden = true; panneau.hidden = true;
+        msg.textContent = "Le portail admin n'est pas configuré (voir « api » dans data.js).";
+        dlg.showModal();
+        return;
+      }
+      dlg.showModal();
+      if (lireCode()) chargerEnDirect().then(function () { afficher(true); });
+      else afficher(false);
+    });
+    document.getElementById("admin-fermer").addEventListener("click", function () { dlg.close(); });
+    document.getElementById("admin-deco").addEventListener("click", function () { deconnecter(""); });
+
+    login.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var code = champCode.value.trim();
+      if (!/^\d{6}$/.test(code)) { msg.textContent = "Le code doit avoir 6 chiffres."; return; }
+      msg.textContent = "Vérification…";
+      ecrireCode(code);
+      appel("POST", "/login")
+        .then(function () { msg.textContent = ""; return chargerEnDirect(); })
+        .then(function () { afficher(true); })
+        .catch(function (err) { deconnecter(err.message || "Erreur réseau."); });
+    });
+  })();
 
   // ---------- Classements ----------
-  var zcl = document.getElementById("zone-classements");
-  lettres(T.classements).forEach(function (g) {
-    var lignes = T.classements[g].map(function (r) {
-      var v = +r.v || 0, n = +r.n || 0, d = +r.d || 0, bp = +r.bp || 0, bc = +r.bc || 0;
-      return { equipe: r.equipe, mj: v + n + d, v: v, n: n, d: d, bp: bp, bc: bc, db: bp - bc, pts: 3 * v + n };
-    });
-    lignes.sort(function (a, b) { return b.pts - a.pts || b.db - a.db || b.bp - a.bp; });
-
-    var cols = [["MJ", "Matchs joués"], ["V", "Victoires"], ["N", "Nuls"], ["D", "Défaites"], ["BP", "Buts pour"], ["BC", "Buts contre"], ["DB", "Différence de buts"], ["PTS", "Points"]];
-    var trh = el("tr", null, [el("th", { scope: "col", texte: "Équipe" })]);
-    cols.forEach(function (c) { trh.appendChild(el("th", { scope: "col" }, [el("abbr", { title: c[1], style: "text-decoration:none", texte: c[0] })])); });
-
-    var tbody = el("tbody");
-    lignes.forEach(function (r, i) {
-      var tr = el("tr", null, [el("th", { scope: "row" }, [el("span", { classe: "rang", texte: (i + 1) + "." }), r.equipe])]);
-      ["mj", "v", "n", "d", "bp", "bc", "db", "pts"].forEach(function (k) {
-        var val = k === "db" && r.db > 0 ? "+" + r.db : String(r[k]);
-        tr.appendChild(el("td", k === "pts" ? { classe: "pts", texte: val } : { texte: val }));
+  // Calculés à partir des matchs « Terminé » entre deux équipes du même groupe.
+  // Un match « Live » ne change pas l'ordre tant qu'il n'est pas terminé.
+  function rendreClassements() {
+    var zcl = document.getElementById("zone-classements");
+    zcl.textContent = "";
+    lettres(T.classements).forEach(function (g) {
+      var parEquipe = {};
+      var lignes = T.classements[g].map(function (r) {
+        return (parEquipe[r.equipe] = { equipe: r.equipe, mj: 0, v: 0, n: 0, d: 0, bp: 0, bc: 0, db: 0, pts: 0 });
       });
-      tbody.appendChild(tr);
-    });
+      (T.calendrier || []).forEach(function (sem) {
+        (sem.matchs || []).forEach(function (m) {
+          var e = etatMatch(m), a = parEquipe[m.equipeA], b = parEquipe[m.equipeB];
+          if (!a || !b || e.statut !== "termine" || e.scoreA === null) return;
+          var sa = +e.scoreA, sb = +e.scoreB;
+          a.mj++; b.mj++;
+          a.bp += sa; a.bc += sb; b.bp += sb; b.bc += sa;
+          if (sa > sb) { a.v++; b.d++; } else if (sa < sb) { b.v++; a.d++; } else { a.n++; b.n++; }
+        });
+      });
+      lignes.forEach(function (r) { r.db = r.bp - r.bc; r.pts = 3 * r.v + r.n; });
+      lignes.sort(function (a, b) { return b.pts - a.pts || b.db - a.db || b.bp - a.bp; });
 
-    var table = el("table", null, [
-      el("caption", null, [el("h3", { texte: "Groupe " + g })]),
-      el("thead", null, [trh]),
-      tbody
-    ]);
-    zcl.appendChild(el("article", { classe: "carte carte-classement" }, [el("div", { classe: "tableau-wrap" }, [table])]));
-  });
+      var cols = [["MJ", "Matchs joués"], ["V", "Victoires"], ["N", "Nuls"], ["D", "Défaites"], ["BP", "Buts pour"], ["BC", "Buts contre"], ["DB", "Différence de buts"], ["PTS", "Points"]];
+      var trh = el("tr", null, [el("th", { scope: "col", texte: "Équipe" })]);
+      cols.forEach(function (c) { trh.appendChild(el("th", { scope: "col" }, [el("abbr", { title: c[1], style: "text-decoration:none", texte: c[0] })])); });
+
+      var tbody = el("tbody");
+      lignes.forEach(function (r, i) {
+        var tr = el("tr", null, [el("th", { scope: "row" }, [el("span", { classe: "rang", texte: (i + 1) + "." }), r.equipe])]);
+        ["mj", "v", "n", "d", "bp", "bc", "db", "pts"].forEach(function (k) {
+          var val = k === "db" && r.db > 0 ? "+" + r.db : String(r[k]);
+          tr.appendChild(el("td", k === "pts" ? { classe: "pts", texte: val } : { texte: val }));
+        });
+        tbody.appendChild(tr);
+      });
+
+      var table = el("table", null, [
+        el("caption", null, [el("h3", { texte: "Groupe " + g })]),
+        el("thead", null, [trh]),
+        tbody
+      ]);
+      zcl.appendChild(el("article", { classe: "carte carte-classement" }, [el("div", { classe: "tableau-wrap" }, [table])]));
+    });
+  }
 
   // ---------- Équipes ----------
   var ze = document.getElementById("zone-equipes");
